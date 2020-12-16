@@ -1,0 +1,38 @@
+{{define "form"}}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Form Templete</title>
+    </head>
+    <body>
+        <form action="/process" method="post">
+            <label>Name : </label>
+            <input type="text" placeholder="type name here" name="name" required/>
+            <br />
+            
+            <label>Massagge :</label>
+            <input type="text" placeholder="type your massage" name="message" required/>
+            <br />
+
+            <button type="submit">print</button>
+        </form>
+    </body>
+    </html>
+{{end}}
+
+{{define "result"}}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Show Message</title>
+    </head>
+    <body>
+        <h1>Hello {{.name}}</h1>
+        <p>{{.message}}</p>
+    </body>
+    </html>
+{{end}}

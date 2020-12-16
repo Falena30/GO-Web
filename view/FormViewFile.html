@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Message for file</title>
+</head>
+<body>
+    <form action="/processFile" method="post" enctype="multipart/form-data">
+        <label>the file:</label>
+        <input type="file" name="file" required /> <br />
+        <label>Rename to:</label>
+        <input type="text" name="alias" /> <br />
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
