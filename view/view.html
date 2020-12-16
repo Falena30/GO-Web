@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Learning HTML/ templete action</title>
+</head>
+<body>
+    <table>
+        <tr>
+            {{/* contoh penggunaan action*/}}
+            <td> {{"Name"}}</td>
+            <td>: {{.Name}}</td>
+        </tr>
+        <tr>
+            <td>Gender</td>
+                {{$gender := .Gender}}
+            <td style="text-transform: capitalize;">:
+                {{$gender}}</td>
+        </tr>
+        <tr>
+            <td>Hobbies</td>
+            <td>:
+                {{range $index, $elemt := .Hobbies}}
+                    {{$elemt}},
+                    {{end}}
+            </td>
+        </tr>
+        {{/*digunkan untuk membeitahu bahwa tidak perlu menambahkan .Info atau secara global*/}}
+        {{with .Info}}
+        <tr>
+            <td>Address</td>
+            <td>: {{.Address}} ({{.GetAffiliationDetailInfo}})</td>
+        </tr>
+        {{end}}
+        <tr>
+            <td>Say Hello</td>
+            <td>:  {{.SayHello "Imam" "yo wassup"}}</td>
+        </tr>
+        {{if eq .Name "Dimas Adi"}}
+        <tr>
+            <td colspan="2" style="font-weight: bold";>
+                Aku Suyikno wow !
+            </td>
+        </tr>
+        {{else if ne .Name "Imam Abdul"}}
+        <tr>
+            <td colspan="2" style="font-weight: bold";>
+                Aku bukan Suyikno atau Adi
+            </td>
+        </tr>
+        {{end}}
+    </table>
+    {{/*digunakan untuk escape html*/}}
+    <p>{{html "<h2>Hello</h2>"}}</p>
+</body>
+</html>
