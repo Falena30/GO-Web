@@ -168,7 +168,70 @@ func handleSave(w http.ResponseWriter, r *http.Request) {
 
 	http.Error(w, "Only accept POST request", http.StatusBadRequest)
 }
+func actionResponse(w http.ResponseWriter, r *http.Request) {
+	data := []struct {
+		Name string
+		Age  int
+	}{
+		{"Dimas Adi", 24},
+		{"Aulia Wahib", 22},
+		{"Imam Abdul", 23},
+		{"Nur Faiz", 22},
+	}
+	//jsoninbytes, err := json.Marshal(data)
+	err := json.NewEncoder(w).Encode(data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	//w.Write(jsoninbytes)
+}
 
+func handleMutli(w http.ResponseWriter, r *http.Request) {
+	var tmpl = template.Must(template.ParseFiles("view/multiView.html"))
+	if err := tmpl.Execute(w, nil); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+
+	}
+}
+
+func handleUpload(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(w, "Only accept POST request", http.StatusBadRequest)
+		return
+	}
+
+	basePath, _ := os.Getwd()
+	reader, err := r.MultipartReader()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	for {
+		part, err := reader.NextPart()
+		if err == io.EOF {
+			break
+		}
+
+		fileLocation := filepath.Join(basePath, "file", part.FileName())
+		dst, err := os.Create(fileLocation)
+		if dst != nil {
+			defer dst.Close()
+		}
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		if _, err := io.Copy(dst, part); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
+	w.Write([]byte(`all files uploaded`))
+}
 func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -224,6 +287,9 @@ func main() {
 	http.HandleFunc("/processFile", routeSubmiFiletPost)
 	http.HandleFunc("/jsonView", handleJSONView)
 	http.HandleFunc("/save", handleSave)
+	http.HandleFunc("/jsonResonse", actionResponse)
+	http.HandleFunc("/multiView", handleMutli)
+	http.HandleFunc("/upload", handleUpload)
 
 	http.Handle("/static/",
 		http.StripPrefix("/static/",
